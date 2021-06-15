@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project One</title>
+    <link rel="stylesheet" href="style/screen.css" />
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js" integrity="sha384-LzhRnpGmQP+lOvWruF/lgkcqD+WDVt9fU3H4BWmwP5u5LTmkUGafMcpZKNObVMLU" crossorigin="anonymous"></script>
+    <script src="script/dataHandler.js"></script>
+    <script src="script/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="top_bar"><h1 class="top_bar--text">Slim Kattenluik</h1></div>
+        <nav>
+            <div class="sidebar">
+                <a href="index.html" class="nav_icon"><img src="./images/home-icon.png" width="37.5px" height="37.5px"/></a>
+                <a href="luna.html" class="nav_icon"><img src="./images/cat-icon.png" width="37.5px" height="37.5px"/></a>
+                <a href="mona.html" class="nav_icon"><img src="./images/cat-icon.png" width="37.5px" height="37.5px"/></a>   
+            </div>
+        </nav>
+
+    </div>
+    
+    <main>
+        <aside class="weather_status--box">
+            <div class="weather_status"><div><img id="js-weather_status--icon-temp" src="./images/sun-icon.png" alt="sunny"></div><div class="js-weather_status--temp"><h2>Het is aangenaam warm buiten</h2></div></div>
+            <div class="weather_status"><div><img id="js-weather_status--icon-lucht" src="./images/sun-icon.png" alt="sunny"></div><div class="js-weather_status--lucht"><h2>Het is redelijk nat buiten</h2></div></div>
+            <div class="weather_status"><div><img id="js-weather_status--icon-licht" src="./images/sun-icon.png" alt="sunny"></div><div class="js-weather_status--licht"><h2>Het is donker buiten</h2></div></div>
+        </aside>
+        <section>
+            <h2 class="subtitles">Histogram</h2>
+            <form action="GET">
+                <div class="histogram_filters">
+                    <label for="licht" class="button_radio">
+                        <input class="hide_radio  js-filter"  data-typeid="licht" type="radio" id="licht" name="histogram" value="licht">
+                    Licht</label>
+                    <label for="temperatuur" class="button_radio">
+                        <input class="hide_radio  js-filter"  data-typeid="temperatuur" type="radio" id="temperatuur" name="histogram" value="temperatuur">
+                    Temperatuur</label>
+                    <label for="luchtvochtigheid" class="button_radio">
+                        <input class="hide_radio  js-filter"  data-typeid="luchtvochtigheid" type="radio" id="luchtvochtigheid" name="histogram" value="luchtvochtigheid">
+                    Luchtvochtigheid</label>
+                </div>
+              </form>
+              <div class="histogram-js" id="histogram-js">
+                
+              </div>
+        </section>
+        <section class="kattenluik_container">
+            
+            <h2 class="subtitles">Kattenluik</h2>
+            <div class="toestand_container js-toestand"> <img src="./images/checkmark-icon.png" alt="check" width="25px" height="25px"> <p>Volledig open</p></div>
+            
+            <h3 class="kattenluik_toestand--title">Verander toestand</h3>
+            <form action="">
+                <div class="kattenluik_toestand">
+                    <label for="dicht" class="button_radio">
+                        <input class="hide_radio js-toestand-btn"  data-typeid="1" type="radio" id="dicht" name="kattenluik" value="dicht">
+                    Volledig dicht</label>
+                    <label for="open" class="button_radio">
+                        <input class="hide_radio js-toestand-btn" data-typeid="2" type="radio" id="open" name="kattenluik" value="open">
+                    Volledig open</label>
+                    <label for="EnkelBuiten" class="button_radio">
+                        <input class="hide_radio js-toestand-btn" data-typeid="3" type="radio" id="EnkelBuiten" name="kattenluik" value="EnkelBuiten">
+                    Enkel buiten</label>
+                    <label for="EnkelBinnen" class="button_radio " >
+                        <input class="hide_radio js-toestand-btn" data-typeid="4" type="radio" id="EnkelBinnen" name="kattenluik" value="EnkelBinnen">
+                    Enkel binnen</label>
+                    
+                </div>
+              </form>
+
+        </section>
+        
+    </main>
+    
+</body>
+</html>

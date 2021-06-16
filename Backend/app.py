@@ -4,7 +4,8 @@ from helpers.klasseknop import Button
 from helpers.DHT11 import sensor_dht11
 from helpers.ldr import ldr
 from helpers.motor2 import motor
-from helpers.lcd import LCD
+#from helpers.lcd import LCD
+import I2C_LCD_driver
 import threading
 import datetime
 import serial
@@ -23,10 +24,11 @@ GPIO.setmode(GPIO.BCM)
 dht11 = sensor_dht11(5)
 ldr = ldr()
 motor = motor()
-status = 0;
-rs = 21
-e = 20
-lcd = LCD(rs, e, [13, 19, 26, 23, 24, 25, 12, 16])
+mylcd = I2C_LCD_driver.lcd()
+#status = 0;
+#rs = 21
+#e = 20
+#lcd = LCD(rs, e, [13, 19, 26, 23, 24, 25, 12, 16])
 
 #led3 = 21
 #knop1 = Button(20)
@@ -63,6 +65,10 @@ def show_data():
       result = dht11.read_data()
       print("Dht11 sensor data succesvol ingelezen")
       if result.is_valid():
+          mylcd.lcd_clear()
+          mylcd.lcd_display_string("Temp: %d%s C" % (result.temperature, chr(223)), 1)
+          mylcd.lcd_display_string("Humidity: %d %%" % result.humidity, 2)
+
           DataRepository.insert_sensorData("C",result.temperature)
           print("Temperatuur inserted")
 
@@ -86,11 +92,15 @@ def insert_serial(Message):
         TagUID = "7A 6D 06 70"
         PoesNaam = "Luna"
         DataRepository.insert_rfid(TagUID,PoesNaam)
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string("Dag Luna!")
         print("Luna inserted")
     elif(Message == "UID tag : 17 7F 18 AF"):
         TagUID = "17 7F 18 AF"
         PoesNaam = "Mona"
         DataRepository.insert_rfid(TagUID,PoesNaam)
+        mylcd.lcd_clear()
+        mylcd.lcd_display_string("Dag Mona!")
         print("Mona inserted")
     elif(Message == "knop1 is ingedrukt"):
         knop = "Binnen"
@@ -184,31 +194,29 @@ thread3.start()
 
 def show_status():
         
-        lcd.clear_display()
-        if status == 0:  
-            print("IP weergeven op lcd")
-            ips = check_output(['hostname', '--all-ip-addresses']).split()
-            print(ips)
-            lcd.write_message(ips[0].decode())
-            if len(ips) > 1:
-                lcd.set_cursor(1, 0)
-                lcd.write_message(ips[1].decode())
-        else:
-            if status == 1:  
-                message = ""
-            else:  
-                message = ""
+        mylcd.lcd_clear()
+        
+        print("IP weergeven op lcd")
+        ips = check_output(['hostname', '--all-ip-addresses']).split()
+        print(ips)
+        mylcd.lcd_display_string(ips[0].decode())
             
-            print("message sent")
-            lcd.set_cursor(1, 0)
-            lcd.write_message(message)
+    
+            #lcd.write_message(ips[0].decode())
+            #if len(ips) > 1:
+            #    lcd.set_cursor(1, 0)
+            #    lcd.write_message(ips[1].decode())
+    #
+            #print("message sent")
+            #lcd.set_cursor(1, 0)
+            #lcd.write_message(message)
 
-#thread4 = threading.Timer(1,show_status)
-#thread4.start()
+thread4 = threading.Timer(30,show_status)
+thread4.start()
 
 
 print("**** Program started ****")
-show_status()
+
 
 # API ENDPOINTS
 endpoint = '/api/v1'
@@ -294,6 +302,8 @@ def switch_Motor(data):
     nieuwe_toestand = int(data['nieuwe_toestand'])
     jsonObject = DataRepository.read_toestand_motor("motor")
     oude_toestand = int(jsonObject['Toestand'])
+    mylcd.lcd_clear()
+    mylcd.lcd_display_string("Luik stand {nieuwe_toestand}")
 
     print(f"{Naam} wordt geswitcht van {oude_toestand} naar {nieuwe_toestand}")
     
